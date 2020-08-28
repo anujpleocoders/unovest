@@ -1,0 +1,177 @@
+{% extends 'unovestAdmin\master.html' %}
+{% block title %}
+    NAV History
+{% endblock %}
+{% block contentsection %}
+{% load static %}
+<!--Begin Loading-->
+<div class="preloader">
+    <div class="loading">
+        <h2>
+            Loading...
+        </h2>
+        <span class="progress"></span>
+    </div>
+</div>
+<!--End Loading-->
+<!--Begin wrapper-->
+<div class="wrapper">
+    <!--Begin Main Panel-->
+    <div class="main-panel">
+        <!-- Navbar -->
+        {% include 'unovestAdmin\header.html' with title_text='Dashboard' %}
+        <!-- End Navbar -->
+        <!--Begin Content-->
+        <div class="content dashboard_v1">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pvr-wrapper">
+                        <div class="pvr-box">
+                            <h5 class="pvr-header">
+                                NAV History
+                            </h5>
+
+                            <table id="dataTable" class="table">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Scheme Code</th>          
+                                        <th>Scheme Name</th>          
+                                        <th>ISIN Div Payout/ISIN Growth</th>          
+                                        <th>ISIN Div Reinvestment</th>          
+                                        <th>Net Asset Value</th>          
+                                        <th>Scheme Minimum Amount</th>          
+                                        <th>Repurchase Price</th>          
+                                        <th>Sale Price</th>          
+                                        <th>Date</th>          
+                                    </tr>
+                                </thead>
+                                {% if datas %}
+                                    <tbody>
+                                        {% for data in datas %}
+                                            <tr>
+                                                <td>{{data.code}}</td>
+                                                <td>{{data.scheme_name}}</td>
+                                                <td>{{data.isis_div_payout}}</td>
+                                                <td>{{data.isis_div_reinvestment}}</td>
+                                                <td>{{data.net_asset_value}}</td>
+                                                <td>{{data.scheme_minimum_amount}}</td>
+                                                <td>{{data.repurchase_price}}</td>
+                                                <td>{{data.sale_price}}</td>
+                                                <td>{{data.date_open_ended}}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                {% else %}
+                                    <td colspan="9" class="text-center">That page contains no results</td>
+                                {% endif %}
+                            </table>
+
+                            <!-- <span class="current">
+                                Showing 1 to {{rows}} of {{ datas.count }} entries
+                            </span> -->
+                            <!-- Custom pagination -->
+                            {% if datas.has_other_pages %}
+                                <ul class="pagination">
+                                    {% if datas.has_previous %}
+                                        <li><a href="?val={{ rows }}&page=1">First</a></li>
+                                        <li><a href="?val={{ rows }}&page={{ datas.previous_page_number }}">Previous</a></li>
+                                        {% if datas.previous_page_number|add:'-1' in datas.paginator.page_range %}
+                                            <li><a href="?val={{ rows }}&page={{ datas.previous_page_number|add:'-1' }}">{{ datas.previous_page_number|add:'-1' }}</a></li>
+                                        {% endif %}
+                                            <li><a href="?val={{ rows }}&page={{ datas.previous_page_number }}">{{ datas.previous_page_number }}</a></li>
+                                    {% else %}
+                                        <li class="disabled"><span>Previous</span></li>
+                                    {% endif %}
+
+                                    <li class="active"><span>{{ datas.number }} <span class="sr-only">(current)</span></span></li>
+                                    
+                                    {% if datas.has_next %}
+                                        <li><a href="?val={{ rows }}&page={{ datas.next_page_number }}">{{ datas.next_page_number }}</a></li>
+                                    {% if datas.next_page_number|add:'1' in datas.paginator.page_range %}
+                                        <li><a href="?val={{ rows }}&page={{ datas.next_page_number|add:'1' }}">{{ datas.next_page_number|add:'1' }}</a></li>
+                                    {% endif %}
+                                    <li><a href="?val={{ rows }}&page={{ datas.next_page_number }}">Next</a></li>
+                                    <li><a href="?page={{ datas.paginator.num_pages }}">Last</a></li>
+                                    {% else %}
+                                        <li class="disabled"><span>Next</span></li>
+                                    {% endif %}
+                                </ul>
+                            {% else %}
+                                <ul class="pagination">
+                                    <li>Go to</li>
+                                    <li> <a href="?val={{ rows }}&page=1">First Page</a></li>
+                                </ul>
+                            {% endif %}
+                            <!--End Custom pagination -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Content-->
+    </div>
+    <!--EndMain Panel-->
+</div>
+<!--End wrapper-->
+
+<!-- begin scroll to top btn -->
+<a href="javascript:void(0)" class="btn btn-icon btn-circle btn-scroll-to-top btn-sm animated invisible text-light"
+   data-color="purple" data-click="scroll-top"><i
+        class="fa fa-angle-up"></i></a>
+<!-- end scroll to top btn -->
+{% endblock %}
+<!-- javascrpt -->
+{% block script %}
+<script>
+     $(document).ready(function() {
+        $('#dataTable').dataTable( {
+            "paging":   false,
+            "ordering": true,
+            "info":     false,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL',
+                    class: 'btn-purple'
+                },
+                {
+                    extend: 'csvHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'excelHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'print',
+                    customize: function ( win ) {
+                        $(win.document.body)
+                            .css( 'font-size', '10pt' )
+                        $(win.document.body).find( 'table' )
+                            .addClass( 'compact' )
+                            .css( 'font-size', 'inherit' );
+                    }
+                }               
+            ]
+        } );        
+       
+        // Adding page dorpdown
+        $('select').change(function() {
+            var url = this.value
+            document.location.href = url;
+        });
+
+        
+    } );
+
+</script>
+{% endblock %}

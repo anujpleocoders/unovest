@@ -1,0 +1,98 @@
+<!--Begin Sidebar-->
+<div class="sidebar" data-color="purple" data-image="">
+    <div class="sidebar-wrapper">
+        <!--Begins Logo start-->
+        <div class="logo">
+            <a class="simple-text logo-normal pl-4" href="">
+                Admin Panel
+            </a>
+        </div>
+        <!--End Logo start-->
+
+        <!--Begins User Section-->
+        <!-- <div class="user">
+            <div class="photo">
+                <img src="http://via.placeholder.com/128x128"/>
+            </div>
+            <div class="info">
+                <a class="collapsed" data-toggle="collapse" href="#pvr_user_nav">
+                    <span>Hello, Admin
+                        <b class="caret"></b>
+                    </span>
+                </a>
+                <div class="collapse m-t-10" id="pvr_user_nav">
+                    <ul class="nav">
+                        <li>
+                            <a class="profile-dropdown" href="">
+                                <span class="sidebar-mini"><i class="icon-settings"></i></span>
+                                <span class="sidebar-normal">Settings</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="profile-dropdown" href="">
+                                <span class="sidebar-mini"><i class="icon-logout"></i></span>
+                                <span class="sidebar-normal">Logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div> -->
+        <!--End User Section-->
+
+        <ul class="nav">
+            <li class="nav-item">
+                <a class="nav-link sub_link" href="{% url 'dashboard' %}">
+                    <i class="material-icons">home</i>
+                    <p>Dashboard</p>
+                </a>
+            </li>
+            <!-- <li class="nav-item ">
+                <a class="nav-link sub_link"  href="{% url 'scheme-data' %}">
+                    <i class="material-icons">low_priority</i>
+                    <p>Scheme Data</p>
+                </a>
+            </li> -->
+
+
+            <!-- <li class="nav-item ">
+                <a class="nav-link sub_link"  href="{% url 'nav-history' %}">
+                    <i class="material-icons">low_priority</i>
+                    <p>NAV History</p>
+                </a>
+            </li> -->
+
+
+            <li class="nav-item ">
+                <a class="nav-link sub_link"  href="{% url 'customer' %}">
+                    <i class="material-icons">low_priority</i>
+                    <p>Customer </p>
+                </a>
+            </li>
+
+            <li class="nav-item ">
+                <a class="nav-link sub_link"  href="{% url 'master-scheme' %}">
+                    <i class="material-icons">low_priority</i>
+                    <p>Master Scheme</p>
+                </a>
+            </li>
+
+            <li class="nav-item sidebar-account">
+                <a class="nav-link"  href="{% url 'account-security' %}">
+                    <i class="material-icons">security</i>
+                    <p>Account and Security</p>
+                </a>
+            </li>
+
+            <li class="nav-item sidebar-setting ">
+                <a class="nav-link" href="{% url 'settings' %}">
+                    <i class="icon-settings"></i>
+                    <p>
+                        Setting
+                    </p>
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+<!--End Sidebar-->

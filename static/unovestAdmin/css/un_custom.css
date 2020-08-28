@@ -1,0 +1,43 @@
+.setting-text p {
+    font-size: 14px;
+}
+
+.setting-wrapper div {
+    height: 115px;
+}
+
+.setting-wrapper div .card-shadow:hover {
+    /* border: 1px solid black; */
+    /* box-shadow: antiquewhite; */
+    transform: scale(1.1);
+    transition: transform .7s ease;
+    box-shadow: 1px 1px #888888;
+}
+
+.sidebar-setting {
+    z-index: 999;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    color: #fff;
+}
+
+.sidebar-setting:hover {
+    /* background: #f5f5 !important; */
+    opacity: 1;
+    color: #fff;
+}
+
+.appintment-model .modal-header{
+    background-color: #e86c07;
+}
+
+
+/* account and privacy css */
+.sidebar-account{
+    z-index: 999;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    color: #fff;
+}

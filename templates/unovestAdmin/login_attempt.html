@@ -1,0 +1,70 @@
+{% extends 'unovestAdmin\master.html' %}
+{% block title %}
+    NAV History
+{% endblock %}
+{% block contentsection %}
+{% load static %}
+<!--Begin Loading-->
+<div class="preloader">
+    <div class="loading">
+        <h2>
+            Loading...
+        </h2>
+        <span class="progress"></span>
+    </div>
+</div>
+<!--End Loading-->
+<!--Begin wrapper-->
+<div class="wrapper">
+    <!--Begin Main Panel-->
+    <div class="main-panel">
+        <!-- Navbar -->
+        {% include 'unovestAdmin\header.html' with title_text='Dashboard' %}
+        <!-- End Navbar -->
+        <!--Begin Content-->
+        <div class="content dashboard_v1">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pvr-wrapper">
+                        <div class="pvr-box">
+                            <h5 class="pvr-header">
+                                NAV History
+                            </h5>
+                            <table id="data-table" class="table table-bordered mt-4">
+                                <thead>
+                                    <tr>
+                                        <th>Username</th>          
+                                        <th>IP Address</th>          
+                                        <th>User agent</th>          
+                                        <th>TimeStamp</th>      
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for LoginAttempt in LoginAttempts %}
+                                        <tr>
+                                            <td>{{LoginAttempt.username}}</td>
+                                            <td>{{LoginAttempt.ip_address}}</td>
+                                            <td>{{LoginAttempt.user_agent}}</td>
+                                            <td>{{LoginAttempt.timestamp}}</td>                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                               
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Content-->
+    </div>
+    <!--EndMain Panel-->
+</div>
+<!--End wrapper-->
+
+<!-- begin scroll to top btn -->
+<a href="javascript:void(0)" class="btn btn-icon btn-circle btn-scroll-to-top btn-sm animated invisible text-light"
+   data-color="purple" data-click="scroll-top"><i
+        class="fa fa-angle-up"></i></a>
+<!-- end scroll to top btn -->
+{% endblock %}
+<!-- javascrpt -->

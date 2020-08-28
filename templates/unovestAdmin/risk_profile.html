@@ -1,0 +1,144 @@
+{% extends 'unovestAdmin\master.html' %}
+{% block title %}
+Risk Profile
+{% endblock %}
+{% block contentsection %}
+{% load static %}
+<!--Begin Loading-->
+<div class="preloader">
+    <div class="loading">
+        <h2>
+            Loading...
+        </h2>
+        <span class="progress"></span>
+    </div>
+</div>
+<!--End Loading-->
+<!--Begin wrapper-->
+<div class="wrapper">
+    <!--Begin Main Panel-->
+    <div class="main-panel">
+        <!-- Navbar -->
+        {% include 'unovestAdmin\header.html' with title_text='Risk Profile' %}
+        <!-- End Navbar -->
+        <!--Begin Content-->
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pvr-wrapper">
+                        <div class="pvr-box">
+                            <h5 class="pvr-header">
+                                Risk Profile
+                                <div class="pvr-box-controls">
+                                    <i class="material-icons" data-box="refresh" data-effect="win8_linear">refresh</i>
+                                </div>
+                            </h5>
+                            <div class="col-md-6">
+                               <form method="post" data-parsley-validate="">
+                                   {% csrf_token %}
+                                    <input type="text" class="form-control risk_profile_name" name="risk_profile_name" required="" placeholder="Name of risk profile">
+                                    <input type="text" class="form-control description" name="description" placeholder="Description">
+                                    <input type="hidden" class="risk_profile_page" name="risk_profile_page" value="add">
+                                    <input type="hidden" class="risk_profile_id" name="risk_profile_id" value="">
+                                    <input type="submit" class="form-control btn btn-primary submit" value="Add"/>
+                               </form>
+                            </div>
+
+                            <table class="table" id="data-table">
+                                <thead>
+                                   <tr>
+                                    <th>Sr. no.</th>
+                                    <th>Name of risk profile</th>
+                                    <th>Description</th>
+                                    <th>Action</th>
+                                   </tr>
+                                </thead>
+                                <tbody>
+                                    {% for riskProfile in riskProfiles %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ riskProfile }}</td>
+                                        <td>{{ riskProfile.description }}</td>
+                                        <td class="tex{{riskProfile.id}}">
+                                            {% if riskProfile.is_status  %}
+                                                <button class="btn btn-purple" onclick="riskProfileStatus({{riskProfile.is_status}},{{riskProfile.id}})" >
+                                                    Active
+                                            {% else %}
+                                                <button class="btn btn-danger" onclick="riskProfileStatus({{riskProfile.is_status}},{{riskProfile.id}})" >
+                                                    Deactive
+                                            {% endif %}
+                                            </button> 
+                                            <button class="btn btn-purple" onclick="riskProfileEdit({{riskProfile.id}})">Edit</button> 
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Content-->
+    </div>
+    <!--EndMain Panel-->
+</div>
+<!--End wrapper-->
+
+<!-- begin scroll to top btn -->
+<a href="javascript:void(0)" class="btn btn-icon btn-circle btn-scroll-to-top btn-sm animated invisible text-light"
+   data-color="purple" data-click="scroll-top"><i
+        class="fa fa-angle-up"></i></a>
+<!-- end scroll to top btn -->
+{% endblock %}
+
+{% block script %}
+ 
+<script>
+// function for categpory edit
+    function riskProfileStatus(status, id){
+        var token = '{{csrf_token}}';
+        $.ajax({
+                headers: { "X-CSRFToken": token },
+                url:"{% url 'risk-profile-status' %}",
+                type:"POST",
+                data:{status:status, id:id},
+
+                success: function( data ) 
+                {
+                        console.log(data, status)
+                    if (data == 'succes'){
+                        if(status == 1){
+                            $('.tex'+id+'').html('<button class="btn btn-danger" onclick="riskProfileStatus(0,'+id+')">Deactive</button> <button class="btn btn-purple" onclick="riskProfileEdit('+id+')">Edit</button>')
+                        }else{
+                            $('.tex'+id+'').html('<button class="btn btn-purple" onclick="riskProfileStatus(1,'+id+')">Active</button> <button class="btn btn-purple" onclick="riskProfileEdit('+id+')">Edit</button>')
+                        }
+                    }
+                }
+            })
+    }
+// End function for categpory edit
+
+// function for sub categpory edit
+    function riskProfileEdit(id){
+        var token = '{{csrf_token}}';
+        $.ajax({
+                headers: { "X-CSRFToken": token },
+                url:"{% url 'risk-profile-edit' %}",
+                type:"POST",
+                data:{id:id},
+
+                success: function( data ) 
+                {
+                    $('.risk_profile_name').val(data.riskProfilesDetails.name)
+                    $('.description').val(data.riskProfilesDetails.description)
+                    $('.risk_profile_page').val('edit')
+                    $('.risk_profile_id').val(id)
+                    $('.submit').val('Update')
+                }
+            })
+    }
+// End function for sub categpory edit
+</script>
+
+{% endblock %}

@@ -1,0 +1,105 @@
+{% extends 'unovestAdmin\master.html' %}
+{% block title %}
+Scheme Data Analysis
+{% endblock %}
+{% block contentsection %}
+{% load static %}
+<!--Begin Loading-->
+<div class="preloader">
+    <div class="loading">
+        <h2>
+            Loading...
+        </h2>
+        <span class="progress"></span>
+    </div>
+</div>
+<!--End Loading-->
+<!--Begin wrapper-->
+<div class="wrapper">
+    <!--Begin Main Panel-->
+    <div class="main-panel">
+        <!-- Navbar -->
+        {% include 'unovestAdmin\header.html' with title_text='Scheme Data Analysis' %}
+        <!-- End Navbar -->
+        <!--Begin Content-->
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pvr-wrapper">
+                        <div class="pvr-box">
+                            <h5 class="pvr-header">
+                                Scheme Data Analysis
+                                <div class="pvr-box-controls">
+                                    <i class="material-icons" data-box="refresh" data-effect="win8_linear">refresh</i>
+                                </div>
+                            </h5>
+                            <input type="hidden" id="history_date" value="{% for navHistory in navHistories %} {{navHistory.date_open_ended}}, {% endfor %}">
+                            <figure class="highcharts-figure">
+                                <div id="container"></div>
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Content-->
+    </div>
+    <!--EndMain Panel-->
+</div>
+<!--End wrapper-->
+
+<!-- begin scroll to top btn -->
+<a href="javascript:void(0)" class="btn btn-icon btn-circle btn-scroll-to-top btn-sm animated invisible text-light"
+   data-color="purple" data-click="scroll-top"><i
+        class="fa fa-angle-up"></i></a>
+<!-- end scroll to top btn -->
+{% endblock %}
+
+{% block script %}
+ 
+<script>
+    $(document).ready(function(){
+        var history_date = $('#history_date').val()
+        console.log(history_date)
+        Highcharts.chart('container', {
+            chart: {
+                type: 'line'
+            },
+            title: {
+                text: 'NAV History'
+            },
+            // subtitle: {
+            //     text: 'Source: WorldClimate.com'
+            // },
+            xAxis: {
+                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+            },
+            yAxis: {
+                title: {
+                    text: ''
+                }
+            },
+            plotOptions: {
+                line: {
+                    dataLabels: {
+                        enabled: true
+                    },
+                    enableMouseTracking: false
+                }
+            },
+            series: [{
+                name: 'Net Asset Value',
+                data: [0, 6.9, 9.5, 14.5, 18.4, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
+            }, {
+                name: 'Repurchace Price',
+                data: [0, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
+            },{
+                name: 'Sale Price',
+                data: [0, 4.4, 5.9, 8.0, 11.0, 15.0, 17.0, 16.0, 14.0, 10.0, 6.0, 4.0]
+            }]
+        });
+    });
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,144 @@
+{% extends 'unovestAdmin\master.html' %}
+{% block title %}
+Sub Category
+{% endblock %}
+{% block contentsection %}
+{% load static %}
+<!--Begin Loading-->
+<div class="preloader">
+    <div class="loading">
+        <h2>
+            Loading...
+        </h2>
+        <span class="progress"></span>
+    </div>
+</div>
+<!--End Loading-->
+<!--Begin wrapper-->
+<div class="wrapper">
+    <!--Begin Main Panel-->
+    <div class="main-panel">
+        <!-- Navbar -->
+        {% include 'unovestAdmin\header.html' with title_text='Sub Category' %}
+        <!-- End Navbar -->
+        <!--Begin Content-->
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pvr-wrapper">
+                        <div class="pvr-box">
+                            <h5 class="pvr-header">
+                                Sub Category
+                                <div class="pvr-box-controls">
+                                    <i class="material-icons" data-box="refresh" data-effect="win8_linear">refresh</i>
+                                </div>
+                            </h5>
+                            <div class="col-md-6">
+                               <form method="post" data-parsley-validate="">
+                                   {% csrf_token %}
+                                    <input type="text" class="form-control tax_name" name="tax_name" required="" placeholder="Tax name">
+                                    <input type="text" class="form-control tax_percent" name="tax_percent" placeholder="Tax percent">
+                                    <input type="hidden" class="tax_page" name="tax_page" value="add">
+                                    <input type="hidden" class="tax_id" name="tax_id" value="">
+                                    <input type="submit" class="form-control btn btn-primary submit" value="Add"/>
+                               </form>
+                            </div>
+
+                            <table class="table" id="data-table">
+                                <thead>
+                                   <tr>
+                                    <th>Sr. no.</th>
+                                    <th>Tax name</th>
+                                    <th>Tax percent</th>
+                                    <th>Action</th>
+                                   </tr>
+                                </thead>
+                                <tbody>
+                                    {% for tax in taxes %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ tax }}</td>
+                                        <td>{{ tax.percent }}%</td>
+                                        <td class="tex{{tax.id}}">
+                                            {% if tax.is_status  %}
+                                                <button class="btn btn-purple" onclick="taxStatus({{tax.is_status}},{{tax.id}})" >
+                                                    Active
+                                            {% else %}
+                                                <button class="btn btn-danger" onclick="taxStatus({{tax.is_status}},{{tax.id}})" >
+                                                    Deactive
+                                            {% endif %}
+                                            </button> 
+                                            <button class="btn btn-purple" onclick="taxEdit({{tax.id}})">Edit</button> 
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Content-->
+    </div>
+    <!--EndMain Panel-->
+</div>
+<!--End wrapper-->
+
+<!-- begin scroll to top btn -->
+<a href="javascript:void(0)" class="btn btn-icon btn-circle btn-scroll-to-top btn-sm animated invisible text-light"
+   data-color="purple" data-click="scroll-top"><i
+        class="fa fa-angle-up"></i></a>
+<!-- end scroll to top btn -->
+{% endblock %}
+
+{% block script %}
+ 
+<script>
+// function for categpory edit
+    function taxStatus(status, id){
+        var token = '{{csrf_token}}';
+        $.ajax({
+                headers: { "X-CSRFToken": token },
+                url:"{% url 'tax-status' %}",
+                type:"POST",
+                data:{status:status, id:id},
+
+                success: function( data ) 
+                {
+                        console.log(data, status)
+                    if (data == 'succes'){
+                        if(status == 1){
+                            $('.tex'+id+'').html('<button class="btn btn-danger" onclick="taxStatus(0,'+id+')">Deactive</button> <button class="btn btn-purple" onclick="taxEdit('+id+')">Edit</button>')
+                        }else{
+                            $('.tex'+id+'').html('<button class="btn btn-purple" onclick="taxStatus(1,'+id+')">Active</button> <button class="btn btn-purple" onclick="taxEdit('+id+')">Edit</button>')
+                        }
+                    }
+                }
+            })
+    }
+// End function for categpory edit
+
+// function for sub categpory edit
+    function taxEdit(id){
+        var token = '{{csrf_token}}';
+        $.ajax({
+                headers: { "X-CSRFToken": token },
+                url:"{% url 'tax-edit' %}",
+                type:"POST",
+                data:{id:id},
+
+                success: function( data ) 
+                {
+                    $('.tax_name').val(data.taxDetails.tax)
+                    $('.tax_percent').val(data.taxDetails.percent)
+                    $('.tax_page').val('edit')
+                    $('.tax_id').val(id)
+                    $('.submit').val('Update')
+                }
+            })
+    }
+// End function for sub categpory edit
+</script>
+
+{% endblock %}

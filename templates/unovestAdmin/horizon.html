@@ -1,0 +1,151 @@
+{% extends 'unovestAdmin\master.html' %}
+{% block title %}
+Sub Category
+{% endblock %}
+{% block contentsection %}
+{% load static %}
+<!--Begin Loading-->
+<div class="preloader">
+    <div class="loading">
+        <h2>
+            Loading...
+        </h2>
+        <span class="progress"></span>
+    </div>
+</div>
+<!--End Loading-->
+<!--Begin wrapper-->
+<div class="wrapper">
+    <!--Begin Main Panel-->
+    <div class="main-panel">
+        <!-- Navbar -->
+        {% include 'unovestAdmin\header.html' with title_text='Sub Category' %}
+        <!-- End Navbar -->
+        <!--Begin Content-->
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pvr-wrapper">
+                        <div class="pvr-box">
+                            <h5 class="pvr-header">
+                                Sub Category
+                                <div class="pvr-box-controls">
+                                    <i class="material-icons" data-box="refresh" data-effect="win8_linear">refresh</i>
+                                </div>
+                            </h5>
+                            <div class="col-md-6">
+                               <form method="post" data-parsley-validate="">
+                                   {% csrf_token %}
+                                   <input type="text" class="form-control horizon_name" name="name" required="" placeholder="Horizon name">
+                                  
+                                    <input type="text" class="form-control period_year" name="period_year" required="" placeholder="Period year">
+                                   
+
+                                    <input type="text" class="form-control description_input" name="description" required="" placeholder="Description">
+                                    <input type="hidden" class="time_horizon_page" name="time_horizon_page" value="add">
+                                    <input type="hidden" class="horizon_id" name="horizon_id" value="">
+                                    <input type="submit" class="form-control btn btn-primary submit" value="Add"/>
+                               </form>
+                            </div>
+
+                            <table class="table" id="data-table">
+                                <thead>
+                                   <tr>
+                                    <th>Sr. no.</th>
+                                    <th>Name</th>
+                                    <th>Period years</th>
+                                    <th>Description</th>
+                                    <th>Action</th>
+                                   </tr>
+                                </thead>
+                                <tbody>
+                                    {% for timeHorizon in timeHorizons %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ timeHorizon.name }}</td>
+                                        <td>{{ timeHorizon.period_year }}</td>
+                                        <td>{{ timeHorizon.description }}</td>
+                                        <td class="timeHorizonstatus{{timeHorizon.id}}">
+                                            {% if timeHorizon.is_status  %}
+                                                <button class="btn btn-purple" onclick="timeHorizonStatus({{timeHorizon.is_status}},{{timeHorizon.id}})" >
+                                                    Active
+                                            {% else %}
+                                                <button class="btn btn-danger" onclick="timeHorizonStatus({{timeHorizon.is_status}},{{timeHorizon.id}})" >
+                                                    Deactive
+                                            {% endif %}
+                                            </button> 
+                                            <button class="btn btn-purple" onclick="timeHorizonstatusEdit({{timeHorizon.id}})">Edit</button> 
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Content-->
+    </div>
+    <!--EndMain Panel-->
+</div>
+<!--End wrapper-->
+
+<!-- begin scroll to top btn -->
+<a href="javascript:void(0)" class="btn btn-icon btn-circle btn-scroll-to-top btn-sm animated invisible text-light"
+   data-color="purple" data-click="scroll-top"><i
+        class="fa fa-angle-up"></i></a>
+<!-- end scroll to top btn -->
+{% endblock %}
+
+{% block script %}
+ 
+<script>
+// function for categpory edit
+    function timeHorizonStatus(status, id){
+        var token = '{{csrf_token}}';
+        $.ajax({
+                headers: { "X-CSRFToken": token },
+                url:"{% url 'time-horizon-status' %}",
+                type:"POST",
+                data:{status:status, id:id},
+
+                success: function( data ) 
+                {
+                        console.log(data, status)
+                    if (data == 'succes'){
+                        if(status == 1){
+                            $('.timeHorizonstatus'+id+'').html('<button class="btn btn-danger" onclick="timeHorizonStatus(0,'+id+')">Deactive</button> <button class="btn btn-purple" onclick="timeHorizonstatusEdit('+id+')">Edit</button>')
+                        }else{
+                            $('.timeHorizonstatus'+id+'').html('<button class="btn btn-purple" onclick="timeHorizonStatus(1,'+id+')">Active</button> <button class="btn btn-purple" onclick="timeHorizonstatusEdit('+id+')">Edit</button>')
+                        }
+                    }
+                }
+            })
+    }
+// End function for categpory edit
+
+// function for sub categpory edit
+    function timeHorizonstatusEdit(id){
+        var token = '{{csrf_token}}';
+        $.ajax({
+                headers: { "X-CSRFToken": token },
+                url:"{% url 'time-horizon-edit' %}",
+                type:"POST",
+                data:{id:id},
+
+                success: function( data ) 
+                {
+                    $('.horizon_name').val(data.timeHorizonsDetails.name)
+                    $('.period_year').val(data.timeHorizonsDetails.period_year)
+                    $('.description_input').val(data.timeHorizonsDetails.description)
+                    $('.time_horizon_page').val('edit')
+                    $('.horizon_id').val(id)
+                    $('.submit').val('Update')
+                }
+            })
+    }
+// End function for sub categpory edit
+</script>
+
+{% endblock %}

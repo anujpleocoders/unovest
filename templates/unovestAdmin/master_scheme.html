@@ -1,0 +1,100 @@
+{% extends 'unovestAdmin\master.html' %}
+{% block title %}
+    Dashboard
+{% endblock %}
+{% block contentsection %}
+{% load static %}
+<!--Begin Loading-->
+<div class="preloader">
+    <div class="loading">
+        <h2>
+            Loading...
+        </h2>
+        <span class="progress"></span>
+    </div>
+</div>
+<!--End Loading-->
+<!--Begin wrapper-->
+<div class="wrapper">
+    <!--Begin Main Panel-->
+    <div class="main-panel">
+        <!-- Navbar -->
+        {% include 'unovestAdmin\header.html' with title_text='Dashboard' %}
+        <!-- End Navbar -->
+        <!--Begin Content-->
+        <div class="content dashboard_v1">
+            <div class="row setting-wrapper">
+                <div class="col-xl-4 col-sm-6 mb-4">
+                    <div class="card card-shadow">
+                        <a href="{% url 'scheme-data' %}">
+                        <div class="card-body">
+                            <div class="row">
+                            <div class="col-3">
+                                <span class="bg-warning text-center pvr-icon-box">
+                                <i class="icon-people text-light f-s-24"></i>
+                                </span>
+                            </div>
+                            <div class="col-9 setting-text">
+                                <h6 class="mt-1 mb-0">Scheme list</h6>
+                                <p class="mb-0">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            </div>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                </div>            
+                     
+                <div class="col-xl-4 col-sm-6 mb-4">
+                    <div class="card card-shadow">
+                        <a href="#">
+                        <div class="card-body">
+                            <div class="row">
+                            <div class="col-3">
+                                <span class="bg-warning text-center pvr-icon-box">
+                                <i class="icon-people text-light f-s-24"></i>
+                                </span>
+                            </div>
+                            <div class="col-9 setting-text">
+                                <h6 class="mt-1 mb-0">Scheme Addritube</h6>
+                                <p class="mb-0">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            </div>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                </div>     
+                
+                <div class="col-xl-4 col-sm-6 mb-4">
+                    <div class="card card-shadow">
+                        <a href="{% url 'nav-history' %}">
+                        <div class="card-body">
+                            <div class="row">
+                            <div class="col-3">
+                                <span class="bg-warning text-center pvr-icon-box">
+                                <i class="icon-people text-light f-s-24"></i>
+                                </span>
+                            </div>
+                            <div class="col-9 setting-text">
+                                <h6 class="mt-1 mb-0">NAV History</h6>
+                                <p class="mb-0">Lorem, ipsum dolor sit amet consectetur adipisicing elit.</p>
+                            </div>
+                            </div>
+                        </div>
+                        </a>
+                    </div>
+                </div>  
+            </div>
+        </div>
+        <!--End Content-->
+    
+    </div>
+    <!--EndMain Panel-->
+</div>
+<!--End wrapper-->
+
+<!-- begin scroll to top btn -->
+<a href="javascript:void(0)" class="btn btn-icon btn-circle btn-scroll-to-top btn-sm animated invisible text-light"
+   data-color="purple" data-click="scroll-top"><i
+        class="fa fa-angle-up"></i></a>
+<!-- end scroll to top btn -->
+{% endblock %}

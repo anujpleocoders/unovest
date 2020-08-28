@@ -1,0 +1,171 @@
+{% extends 'unovestAdmin/master.html' %}
+
+
+{% block title %}
+    User detail
+{% endblock %}
+
+{% block contentsection %}
+{% load static %}
+<div class="wrapper">
+    <!--Begin Main Panel-->
+    <div class="main-panel">
+            {% include 'unovestAdmin/header.html' with title_text='User detail' %}
+        <!--Begin Content-->
+            <div class="content">
+                <div class="row">
+                    <div class="col-sm-7">
+                        {% if messages %}
+                            {% for message in messages %}
+                            <div class="alert alert-{{message.tags}}">
+                                {{ message }}
+                            </div>
+                            {% endfor %}
+                        {% endif %}
+                        <div class="pvr-wrapper">
+                            <div class="pvr-box">
+                                <div class="element-info">
+                                    <div class="element-info-with-icon">
+                                        <div class="element-info-text">
+                                            <h5 class="element-inner-header text-capitalize">
+                                               {{ users.first_name }}  {{ users.last_name }}
+                                            </h5>
+                                            <div class="element-inner-desc text-justify">
+                                               Last login date {{ users.last_login }}
+                                               <br>
+                                               Current status: {% if users.is_active %} Active {% else %} Deactive{% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">First name</label>
+                                        <div class="">
+                                            <p class="form-control-static"> {% if users.first_name %} {{users.first_name}} {% else %} Not available {% endif %}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label class="col-form-label">Last name</label>
+                                        <div class="">
+                                            <p class="form-control-static">{% if users.last_name %}  {{users.last_name}} {% else %} Not available {% endif %}</p>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Username</label>
+                                            <div class="">
+                                                <p class="form-control-static">{{ users.username }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Email</label>
+                                            <div class="">
+                                                <p class="form-control-static">{% if users.email|length == 0 %} Not available {% else %} {{ users.email }} {% endif %}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Date of Joining</label>
+                                            <div class="">
+                                                <p class="form-control-static">{{ users.date_joined }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <label class="col-form-label">Staff</label>
+                                            <div class="">
+                                                <p class="form-control-static">{% if users.is_staff %} Yes {% else %} No staff {% endif %}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 customerStatus{{users.id}}">
+                                    <button class="btn btn-outline-primary" onclick="customerStatus({% if users.is_active %}1{% else %}0{% endif %},{{users.id}})" >Submit</button>
+                            
+                                </div>
+                               
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="col-sm-5" >
+                        <div class="pvr-wrapper">
+                            <div class="pvr-box scrollable-content">
+                                <h6 class="element-header">
+                                    {{ users.first_name }} Activity on property attribute
+                                </h6>
+                                
+                                <div class="timed-activities compact">
+                                    <div class="timed-activity">
+                                        {% for activityDate in activityDates %}
+                                            <div class="ta-date">
+                                                <span>{{ activityDate }}</span>
+                                            </div>
+                                            {% for activity in userActivity %}
+                                                {% if activityDate|date:'m:d:y' == activity|date:'m:d:y' %}
+                                                <div class="ta-record-w">
+                                                    <div class="ta-record">
+                                                        <div class="ta-timestamp">
+                                                            <strong>{{activity.search_date | date:'H:i a'}}</strong>
+                                                        </div>
+                                                        <div class="ta-activity">
+                                                            Search for <a href="javascript:void(0)">{{activity.attr.attr_name}}</a> <br>
+                                                            {% if activity.value|default:""|slice:"-1:" == ","  %}
+                                                            Selected value <a href="javascript:void(0)">{{activity.value|slice:":-1"}}</a>
+                                                            {% else %}
+                                                            Selected value <a href="javascript:void(0)">{{activity.value}}</a>
+                                                            {% endif %}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   -->
+                </div>
+            </div>
+        <!--End Content-->
+    </div>
+    <!--EndMain Panel-->
+</div>
+
+<!-- begin scroll to top btn -->
+<a href="javascript:void(0)" class="btn btn-icon btn-circle btn-scroll-to-top btn-sm animated invisible text-light"
+   data-color="purple" data-click="scroll-top"><i
+        class="fa fa-angle-up"></i></a>
+<!-- end scroll to top btn -->
+{% endblock %}
+{% block script%}
+<script>
+  function customerStatus(status, id){
+        var token = '{{csrf_token}}';
+        $.ajax({
+                headers: { "X-CSRFToken": token },
+                url:"{% url 'customer-status' %}",
+                type:"POST",
+                data:{status:status, id:id},
+
+                success: function( data ) 
+                {
+                        console.log(data, status)
+                    if (data == 'succes'){
+                        if(status == 1){
+                            $('.customerStatus'+id+'').html('<button class="btn btn-danger" onclick="customerStatus(0,'+id+')">Deactive</button>')
+                        }else{
+                            $('.customerStatus'+id+'').html('<button class="btn btn-purple" onclick="customerStatus(1,'+id+')">Active</button>')
+                        }
+                    }
+                }
+            })
+    }
+</script>
+{% endblock %}

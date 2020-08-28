@@ -1,0 +1,180 @@
+{% extends 'unovestAdmin\master.html' %}
+{% block title %}
+    Scheme Data
+{% endblock %}
+{% block contentsection %}
+{% load static %}
+<!--Begin Loading-->
+<div class="preloader">
+    <div class="loading">
+        <h2>
+            Loading...
+        </h2>
+        <span class="progress"></span>
+    </div>
+</div>
+<!--End Loading-->
+<!--Begin wrapper-->
+<div class="wrapper">
+    <!--Begin Main Panel-->
+    <div class="main-panel">
+        <!-- Navbar -->
+        {% include 'unovestAdmin\header.html' with title_text='Scheme Data' %}
+        <!-- End Navbar -->
+        <!--Begin Content-->
+        <div id="preloader" class="d-none">
+            <div id="loader"></div>
+        </div>
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pvr-wrapper">
+                        <div class="pvr-box">
+                            <h5 class="pvr-header">Scheme Data</h5>
+                                <div class="pvr-box-controls px-2">
+                                    Number of rows:
+                                    <select class="browser-default custom-select" >
+                                        <option value="?val=10&page={{page_number}}" {% if rows == '10' %} selected {% endif %} > 10 </option>
+                                        <option value="?val=20&page={{page_number}}" {% if rows == '20' %} selected {% endif %} > 20 </option>
+                                        <option value="?val=25&page={{page_number}}" {% if rows == '25' %} selected {% endif %} > 25 </option>
+                                        <option value="?val=50&page={{page_number}}" {% if rows == '50' %} selected {% endif %} > 50 </option>
+                                        <option value="?val=100&page={{page_number}}" {% if rows == '100' %} selected {% endif %} > 100 </option>
+                                        <option value="?val=250&page={{page_number}}" {% if rows == '250' %} selected {% endif %} > 250 </option>
+                                        <option value="?val=500&page={{page_number}}" {% if rows == '500' %} selected {% endif %} > 500 </option>
+                                    </select>
+                                </div>
+                                
+                            <table id="dataTable" class="table mt-4">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th>Sr. no</th>          
+                                        <th>AMC</th>          
+                                        <th>Code</th>          
+                                        <th>Scheme Name</th>          
+                                        <th>Scheme Type</th>          
+                                        <th>Scheme Category</th>          
+                                        <th>Scheme Nav Name</th>          
+                                        <th>Scheme Minimum Amount</th>          
+                                        <th>Launch Date</th>          
+                                        <th>Closure Date</th>          
+                                        <th>ISIS Div Payout</th>          
+                                        <th>ISIS Div Reinvestment</th>          
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for data in datas %}
+                                        <tr>
+                                            <th class="row">{{forloop.counter}}</th>
+                                            <td>{{data.amc}}</td>
+                                            <td>{{data.code}}</td>
+                                            <td>{{data.scheme_name}}</td>
+                                            <td>{{data.scheme_type}}</td>
+                                            <td>{{data.scheme_category}}</td>
+                                            <td>{{data.scheme_nav_name}}</td>
+                                            <td>{{data.scheme_minimum_amount}}</td>
+                                            <td>{{data.launch_date}}</td>
+                                            <td>{{data.closure_date}}</td>
+                                            <td>{{data.isis_div_payout}}</td>
+                                            <td>{{data.isis_div_reinvestment}}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            <!-- Custom pagination -->
+                            {% if datas.has_other_pages %}
+                                <ul class="pagination">
+                                    {% if datas.has_previous %}
+                                        <li><a href="?val={{ rows }}&page=1">First</a></li>
+                                        <li><a href="?val={{ rows }}&page={{ datas.previous_page_number }}">Previous</a></li>
+                                    {% else %}
+                                        <li class="disabled"><span>Previous</span></li>
+                                    {% endif %}
+                                    {% for i in datas.paginator.page_range %}
+                                        {% if datas.number == i %}
+                                            <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+                                        {% elif i > datas.number|add:'-3' and i < datas.number|add:'3' %}
+                                            <li><a href="?val={{ rows }}&page={{ i }}">{{ i }}</a></li>
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if datas.has_next %}
+                                        <li><a href="?val={{ rows }}&page={{ datas.next_page_number }}">Next</a></li>
+                                        <li><a href="?page={{ datas.paginator.num_pages }}">Last</a></li>
+                                    {% else %}
+                                        <li class="disabled"><span>Next</span></li>
+                                    {% endif %}
+                                </ul>
+                            {% endif %}
+                            <!--End Custom pagination -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Content-->
+    
+    </div>
+    <!--EndMain Panel-->
+</div>
+<!--End wrapper-->
+
+<!-- begin scroll to top btn -->
+<a href="javascript:void(0)" class="btn btn-icon btn-circle btn-scroll-to-top btn-sm animated invisible text-light"
+   data-color="purple" data-click="scroll-top"><i
+        class="fa fa-angle-up"></i></a>
+<!-- end scroll to top btn -->
+{% endblock %}
+
+<!-- javascrpt -->
+{% block script %}
+<script>
+     $(document).ready(function() {
+        $('#dataTable').dataTable( {
+            paging: false,
+            searching: false,
+            info: false,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'copyHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL',
+                    class: 'btn-purple'
+                },
+                {
+                    extend: 'csvHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'excelHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'pdfHtml5',
+                    orientation: 'landscape',
+                    pageSize: 'LEGAL'
+                },
+                {
+                    extend: 'print',
+                    customize: function ( win ) {
+                        $(win.document.body)
+                            .css( 'font-size', '10pt' )
+                        $(win.document.body).find( 'table' )
+                            .addClass( 'compact' )
+                            .css( 'font-size', 'inherit' );
+                    }
+                }               
+            ]
+        } );        
+       
+        // Adding page dorpdown
+        $('select').change(function() {
+            var url = this.value
+            document.location.href = url;
+        });
+        
+    } );
+
+</script>
+{% endblock %}

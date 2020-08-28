@@ -1,0 +1,149 @@
+{% extends 'unovestAdmin\master.html' %}
+{% block title %}
+Sub Category
+{% endblock %}
+{% block contentsection %}
+{% load static %}
+<!--Begin Loading-->
+<div class="preloader">
+    <div class="loading">
+        <h2>
+            Loading...
+        </h2>
+        <span class="progress"></span>
+    </div>
+</div>
+<!--End Loading-->
+<!--Begin wrapper-->
+<div class="wrapper">
+    <!--Begin Main Panel-->
+    <div class="main-panel">
+        <!-- Navbar -->
+        {% include 'unovestAdmin\header.html' with title_text='Sub Category' %}
+        <!-- End Navbar -->
+        <!--Begin Content-->
+        <div class="content">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="pvr-wrapper">
+                        <div class="pvr-box">
+                            <h5 class="pvr-header">
+                                Sub Category
+                                <div class="pvr-box-controls">
+                                    <i class="material-icons" data-box="refresh" data-effect="win8_linear">refresh</i>
+                                </div>
+                            </h5>
+                            <div class="col-md-6">
+                               <form method="post" data-parsley-validate="">
+                                   {% csrf_token %}
+                                    <select name="category" class="form-control" id="" required>
+                                        <option disabled selected="True">Select category</option>
+                                        {% for category in categories %}
+                                            <option value="{{category.id}}" class="category{{category.id}}">{{category.name}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    <input type="text" class="form-control sub_category_input" name="sub_category" required="" placeholder="sub category name">
+                                    <input type="hidden" class="sub_current_page" name="sub_current_page" value="add">
+                                    <input type="hidden" class="sub_category_id" name="sub_category_id" value="">
+                                    <input type="submit" class="form-control btn btn-primary submit" value="Add"/>
+                               </form>
+                            </div>
+
+                            <table class="table" id="data-table">
+                                <thead>
+                                   <tr>
+                                    <th>Sr. no.</th>
+                                    <th>Sub Category name</th>
+                                    <th>Category name</th>
+                                    <th>Action</th>
+                                   </tr>
+                                </thead>
+                                <tbody>
+                                    {% for sub_category in sub_categories %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ sub_category.category }}</td>
+                                        <td>{{ sub_category.name }}</td>
+                                        <td class="subCategorystatus{{sub_category.id}}">
+                                            {% if sub_category.is_status  %}
+                                                <button class="btn btn-purple" onclick="subCategoryStatus({{sub_category.is_status}},{{sub_category.id}})" >
+                                                    Active
+                                            {% else %}
+                                                <button class="btn btn-danger" onclick="subCategoryStatus({{sub_category.is_status}},{{sub_category.id}})" >
+                                                    Deactive
+                                            {% endif %}
+                                            </button> 
+                                            <button class="btn btn-purple" onclick="subCategoryEdit({{sub_category.id}})">Edit</button> 
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!--End Content-->
+    </div>
+    <!--EndMain Panel-->
+</div>
+<!--End wrapper-->
+
+<!-- begin scroll to top btn -->
+<a href="javascript:void(0)" class="btn btn-icon btn-circle btn-scroll-to-top btn-sm animated invisible text-light"
+   data-color="purple" data-click="scroll-top"><i
+        class="fa fa-angle-up"></i></a>
+<!-- end scroll to top btn -->
+{% endblock %}
+
+{% block script %}
+ 
+<script>
+// function for categpory edit
+    function subCategoryStatus(status, id){
+        var token = '{{csrf_token}}';
+        $.ajax({
+                headers: { "X-CSRFToken": token },
+                url:"{% url 'sub-category-status' %}",
+                type:"POST",
+                data:{status:status, id:id},
+
+                success: function( data ) 
+                {
+                        console.log(data, status)
+                    if (data == 'succes'){
+                        if(status == 1){
+                            $('.subCategorystatus'+id+'').html('<button class="btn btn-danger" onclick="subCategoryStatus(0,'+id+')">Deactive</button> <button class="btn btn-purple" onclick="categoryEdit('+category.id+')">Edit</button>')
+                        }else{
+                            $('.subCategorystatus'+id+'').html('<button class="btn btn-purple" onclick="subCategoryStatus(1,'+id+')">Active</button> <button class="btn btn-purple" onclick="categoryEdit('+category.id+')">Edit</button>')
+                        }
+                    }
+                }
+            })
+    }
+// End function for categpory edit
+
+// function for sub categpory edit
+    function subCategoryEdit(id){
+        var token = '{{csrf_token}}';
+        $.ajax({
+                headers: { "X-CSRFToken": token },
+                url:"{% url 'sub-category-edit' %}",
+                type:"POST",
+                data:{id:id},
+
+                success: function( data ) 
+                {
+                    $('.sub_category_input').val(data.categoryDetails.name)
+                    $('.category'+data.categoryDetails.category_id+'').attr('selected', 'True')
+                    $('.sub_current_page').val('edit')
+                    $('.sub_category_id').val(id)
+                    $('.submit').val('Update')
+                }
+            })
+    }
+// End function for sub categpory edit
+</script>
+
+{% endblock %}
