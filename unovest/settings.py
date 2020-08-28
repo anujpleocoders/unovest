@@ -12,8 +12,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
+
 
 ALLOWED_HOSTS = ['unovest.herokuapp.com']
 

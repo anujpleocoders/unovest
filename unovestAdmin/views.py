@@ -42,7 +42,7 @@ def loginSubmit(request):
             if user:
                 if user.is_staff:
                     login(request, user)
-                    print(len(nextUrl), nextUrl)
+
                     if nextUrl == 'None':
                         return redirect(index)
                     else:
