@@ -212,7 +212,7 @@ def navHistory(request):
         rows = request.GET.get('val')
     else:
         rows = 10
-
+    datasCount = nav_history.objects.count()
     datas = nav_history.objects.order_by('code').all()
     paginator = Paginator(datas, rows)
 
@@ -231,6 +231,7 @@ def navHistory(request):
     print('page_obj=>', page_obj)
     context = {
         'datas':page_obj,
+        'datasCount':datasCount,
         'rows':rows,
         'page_number':page_number
     }

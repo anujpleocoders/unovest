@@ -8,14 +8,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
+SECRET_KEY = '2$5r52@hhr-i5imo36ombf$^4vib!9592r5=%m+kzn*m8pzdgh'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-# SESSION_COOKIE_SECURE = True
-# CSRF_COOKIE_SECURE = True
 
-ALLOWED_HOSTS = ['unovest.herokuapp.com']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -43,10 +41,6 @@ SITE_ID = 1
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-
-        # Heroku Static Files MIDDLEWARE
-    'whitenoise.middleware.WhiteNoiseMiddleware',
-
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -81,23 +75,16 @@ WSGI_APPLICATION = 'unovest.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-#         'NAME': 'unovest',
-#         'USER': 'postgres',
-#         'PASSWORD': '1234',
-#         'HOST': 'localhost',
-#         'PORT': '',
-#     }
-# }
-
-import dj_database_url
-
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600)
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'unovest_new',
+        'USER': 'postgres',
+        'PASSWORD': '1234',
+        'HOST': 'localhost',
+        'PORT': '',
+    }
 }
-
 
 
 # Password validation
@@ -146,8 +133,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 # crispy forms design package
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
