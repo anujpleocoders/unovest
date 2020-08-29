@@ -61,24 +61,28 @@
                                         <th>ISIS Div Reinvestment</th>          
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    {% for data in datas %}
-                                        <tr>
-                                            <th class="row">{{forloop.counter}}</th>
-                                            <td>{{data.amc}}</td>
-                                            <td>{{data.code}}</td>
-                                            <td>{{data.scheme_name}}</td>
-                                            <td>{{data.scheme_type}}</td>
-                                            <td>{{data.scheme_category}}</td>
-                                            <td>{{data.scheme_nav_name}}</td>
-                                            <td>{{data.scheme_minimum_amount}}</td>
-                                            <td>{{data.launch_date}}</td>
-                                            <td>{{data.closure_date}}</td>
-                                            <td>{{data.isis_div_payout}}</td>
-                                            <td>{{data.isis_div_reinvestment}}</td>
-                                        </tr>
-                                    {% endfor %}
-                                </tbody>
+                                {% if datas %}
+                                    <tbody>
+                                        {% for data in datas %}
+                                            <tr>
+                                                <th class="row">{{forloop.counter}}</th>
+                                                <td>{{data.amc}}</td>
+                                                <td>{{data.code}}</td>
+                                                <td>{{data.scheme_name}}</td>
+                                                <td>{{data.scheme_type}}</td>
+                                                <td>{{data.scheme_category}}</td>
+                                                <td>{{data.scheme_nav_name}}</td>
+                                                <td>{{data.scheme_minimum_amount}}</td>
+                                                <td>{{data.launch_date}}</td>
+                                                <td>{{data.closure_date}}</td>
+                                                <td>{{data.isis_div_payout}}</td>
+                                                <td>{{data.isis_div_reinvestment}}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                {% else %}
+                                    <td colspan="9" class="text-center">That page contains no results</td>
+                                {% endif %}
                             </table>
                             <!-- Custom pagination -->
                             {% if datas.has_other_pages %}
