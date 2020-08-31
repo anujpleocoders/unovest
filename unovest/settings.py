@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     #End allauth login
-    'unovestAdmin',    
+    'unovestAdmin'
 ]
 
 # allauth login
