@@ -241,9 +241,9 @@ def navHistory(request):
 @login_required(login_url='/secret/') #redirect when user is not logged in
 def fetchNavHistory(request):
     
-    for mf in range(2000, 2020):
+    for year in range(2000, 2020):
         for mf in range(0, 101):
-            url = 'http://portal.amfiindia.com/DownloadNAVHistoryReport_Po.aspx?mf='+str(mf)+'&tp=1&frmdt=01-jan-2001&todt=31-Dec-2002'
+            url = 'http://portal.amfiindia.com/DownloadNAVHistoryReport_Po.aspx?mf='+str(mf)+'&tp=1&frmdt=01-jan-'+year+'&todt=31-Dec-'+year+1+'
             csvfile = requests.get(url, allow_redirects=True)
             files_data = csvfile.content.decode('utf-8')
             lines = files_data.split("\n")
