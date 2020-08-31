@@ -146,11 +146,10 @@ def fetchSchemeData(request):
     url = 'http://portal.amfiindia.com/DownloadSchemeData_Po.aspx?mf=0'
     csvfile = requests.get(url, allow_redirects=True)
 
-    # print(r.content.decode('utf-8'))
     files_data = csvfile.content.decode('utf-8')
     lines = files_data.split("\n")
     i = 0
-
+    print(lines)
     for line in lines:
         dataLists = line.split(",")     
 
@@ -168,6 +167,7 @@ def fetchSchemeData(request):
                 except IndexError:
                     isis_div_payout = None
                     isis_div_reinvestment = None
+                
 
 
                 # Checking for data already exist or not
@@ -241,33 +241,33 @@ def navHistory(request):
 @login_required(login_url='/secret/') #redirect when user is not logged in
 def fetchNavHistory(request):
     
-    for mf in range(0, 101):
-        print(mf)
-        url = 'http://portal.amfiindia.com/DownloadNAVHistoryReport_Po.aspx?mf='+str(mf)+'&tp=1&frmdt=01-jan-2016&todt=31-Dec-2017'
-        csvfile = requests.get(url, allow_redirects=True)
-        files_data = csvfile.content.decode('utf-8')
-        lines = files_data.split("\n")
-        d = 0
-        for line in lines:
-            dataLists = line.split(",")
-            for dataList in dataLists:
-                if d > 5:
-                    data = dataList.split(";")
-                    print('data=>', data)
-                    if len(data) > 5:
-                        if '<div id="prepage" style="position:absolute' not in data:
-                            # Saving data
-                            nav_history.objects.create(
-                                code = data[0],
-                                scheme_name = data[1],
-                                isis_div_payout = data[2],
-                                isis_div_reinvestment = data[3],
-                                net_asset_value = data[4],
-                                repurchase_price = data[5],
-                                sale_price = data[6],
-                                date_open_ended = data[7],
-                            )
-                d += 1    
+    for mf in range(2000, 2020):
+        for mf in range(0, 101):
+            url = 'http://portal.amfiindia.com/DownloadNAVHistoryReport_Po.aspx?mf='+str(mf)+'&tp=1&frmdt=01-jan-2001&todt=31-Dec-2002'
+            csvfile = requests.get(url, allow_redirects=True)
+            files_data = csvfile.content.decode('utf-8')
+            lines = files_data.split("\n")
+            d = 0
+            for line in lines:
+                dataLists = line.split(",")
+                for dataList in dataLists:
+                    if d > 5:
+                        data = dataList.split(";")
+                        print('data=>', data)
+                        if len(data) > 5:
+                            if '<div id="prepage" style="position:absolute' not in data:
+                                # Saving data
+                                nav_history.objects.create(
+                                    code = data[0],
+                                    scheme_name = data[1],
+                                    isis_div_payout = data[2],
+                                    isis_div_reinvestment = data[3],
+                                    net_asset_value = data[4],
+                                    repurchase_price = data[5],
+                                    sale_price = data[6],
+                                    date_open_ended = data[7],
+                                )
+                    d += 1    
 
     return redirect(navHistory)
 
